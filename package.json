@@ -1,0 +1,22 @@
+{
+  "name": "0project",
+  "version": "1.0.0",
+  "description": "ERS API",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mido",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "ts-node": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "nodemon": "^1.18.9",
+    "typescript": "^3.2.4"
+  }
+}
