@@ -1,6 +1,6 @@
 import express from 'express';
 import { unauthorizedError } from '../middleware/error.middleware';
-import { UserDAO } from '../DAOs/userDAO';
+import { UserDAO } from '../dao/userDAO';
 
 const users = new UserDAO();
 
@@ -84,7 +84,7 @@ export function pageGenerator(vars, user) {
   }
   let html = `<html>
   <head>
-  <title>Project 0 App - ${title}</title>
+  <title>Project 0 - ${title}</title>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
   </head>
   <body>
@@ -109,9 +109,6 @@ export function pageGenerator(vars, user) {
   </nav>
   <div id="primary">
   ${body}
-  </div>
-  <footer>Project 0<br/>Kenneth Currie</footer>
-  </div>
   </body>
   </html>`;
   return html;

@@ -2,9 +2,9 @@ import express from 'express';
 import { pageGenerator } from './auth.router';
 import { authFinanceMiddleware } from '../middleware/auth.middleware';
 import { unauthorizedError, notFound } from '../middleware/error.middleware';
-import { ReimbursementStatusDAO } from '../DAOs/reimbursementstatusDAO';
-import { ReimbursementDAO } from '../DAOs/reimbursementDAO';
-import { UserDAO } from '../DAOs/userDAO';
+import { ReimbursementStatusDAO } from '../dao/reimbursementstatusDAO';
+import { ReimbursementDAO } from '../dao/reimbursementDAO';
+import { UserDAO } from '../dao/userDAO';
 
 // DB
 const users = new UserDAO();
