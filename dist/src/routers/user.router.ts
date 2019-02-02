@@ -2,7 +2,7 @@ import express from 'express';
 import { pageGenerator } from '../routers/auth.router';
 import { authAdminFinanceMiddleware, authAdminMiddleware } from '../middleware/auth.middleware';
 import { notFound } from '../middleware/error.middleware';
-import { UserDAO } from '../DAOs/userDAO';
+import { UserDAO } from '../dao/userDAO';
 
 export const userRouter = express.Router();
 

@@ -6,10 +6,10 @@ import { userRouter } from './routers/user.router';
 import { reimbursementRouter } from './routers/reimbursement.router';
 import { notFound, internalError } from './middleware/error.middleware';
 
-export const port: number = 8080;
 const methodOverride = require('method-override');
+
 const app = express();
-app.use('/', express.static(__dirname + '/public/'));
+app.use('/', express.static(__dirname + '/views/'));
 
 // set up body parser to convert json body to js object and attach to req
 app.use(bodyParser.json());
@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 
 // set up express to attach sessions
 const sess = {
-  secret: '8675309',
+  secret: '12345678',
   cookie: { secure: false },
   resave: false,
   saveUninitialized: false
@@ -47,13 +47,6 @@ app.use('/', authRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimbursementRouter);
 
-// error middleware
-app.use(function(req, res) {
-   notFound(req, res);
-});
-app.use(function(error, req, res) {
-  internalError(req, res);
-});
 
-app.listen(port);
-console.log(`application started on port: ${port}`);
+app.listen(3000);
+console.log(`application started on port: ${3000}`);
