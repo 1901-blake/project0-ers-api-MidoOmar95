@@ -1,6 +1,6 @@
 import express from 'express';
 import { pageGenerator } from './auth.router';
-import { authFinanceMiddleware } from '../middleware/auth.middleware';
+import { authAdminFinanceMiddleware } from '../middleware/auth.middleware';
 import { unauthorizedError, notFound } from '../middleware/error.middleware';
 import { ReimbursementStatusDAO } from '../dao/reimbursementstatusDAO';
 import { ReimbursementDAO } from '../dao/reimbursementDAO';
@@ -22,18 +22,18 @@ reimbursementRouter.get('', (req, res) => {
   if (role === undefined) {
     unauthorizedError(req, res);
   }
-  let body = `<p><a href="/reimbursements/submit">Submit Reimbursements</a></p>`;
-  body    += `<p><a href="/reimbursements/author/userId/${id}">My Reimbursements</a></p>`;
-  if ( role === 'Finance-Manager') {
-    body  += `<p><a href="/reimbursements/author">Reimbursements by User</a></p>`;
-    body  += `<p><a href="/reimbursements/status">Reimbursements by Status</a></p>`;
+  let body = `<p><a href="/reimbursements/submit"><button class="button2">Submit Reimbursements</button></a></p>`;
+  body    += `<p><a href="/reimbursements/author/userId/${id}"><button class="button2">My Reimbursements</button></a></p>`;
+  if ( role === 'Finance-Manager' || 'Admin') {
+    body  += `<p><a href="/reimbursements/author"><button class="login_btn button2">Reimbursements by User</button></a></p>`;
+    body  += `<p><a href="/reimbursements/status"><button class="login_btn button2">Reimbursements by Status</button></a></p>`;
   }
   body += '';
   res.status(200).send(pageGenerator(['Reimbursements', body], req.session.user));
 });
 
 // approve or deny reiumbursement
-reimbursementRouter.patch('', [authFinanceMiddleware, (req, res) => {
+reimbursementRouter.patch('', [authAdminFinanceMiddleware, (req, res) => {
   ReimbursementDAO.updateReimbursement(req.body.status, req.body.reimbursementId);
   res.redirect(`/reimbursements/r/${req.body.reimbursementId}`);
 }]);
@@ -64,14 +64,14 @@ reimbursementRouter.post('', (req, res) => {
 });
 
 // Show all users
-reimbursementRouter.get('/author', [authFinanceMiddleware, (req, res) => {
+reimbursementRouter.get('/author', [authAdminFinanceMiddleware, (req, res) => {
   users.getAllUsers().then(function (result) {
     res.status(200).send(pageGenerator(['Users', userbody(result)], req.session.user));
   });
 }]);
 
 // Show all Statuses
-reimbursementRouter.get('/status', [authFinanceMiddleware, (req, res) => {
+reimbursementRouter.get('/status', [authAdminFinanceMiddleware, (req, res) => {
   statuses.getAllReimbursementStatuses().then(function (result) {
     res.status(200).send(pageGenerator(['Statuses', statusbody(result)], req.session.user));
   });
@@ -81,7 +81,7 @@ reimbursementRouter.get('/status', [authFinanceMiddleware, (req, res) => {
 reimbursementRouter.get('/author/userId/:id', (req, res) => {
   if (req.session === undefined || req.session.user === undefined || req.session.user.role.role === undefined) {
     unauthorizedError(req, res);
-  } else if (req.params.id == req.session.user.userId || req.session.user.role.role === 'Finance-Manager') {
+  } else if (req.params.id == req.session.user.userId || req.session.user.role.role === 'Finance-Manager' || req.session.user.role.role === 'Admin') {
     const idParam = +req.params.id; // convert to number
     reimbursements.getReimbursementsByUserId(idParam).then(function (result) {
       res.status(200).send(pageGenerator(['Reimbursements', reimbursementbody(result, req.session.user.role, false)], req.session.user));
@@ -92,8 +92,8 @@ reimbursementRouter.get('/author/userId/:id', (req, res) => {
 });
 
 // Get reimbursements by status
-reimbursementRouter.get('/status/:statusId', [authFinanceMiddleware, (req, res) => {
-  if (req.params.id == req.session.user.userId || req.session.user.role.role === 'Finance-Manager') {
+reimbursementRouter.get('/status/:statusId', [authAdminFinanceMiddleware, (req, res) => {
+  if (req.params.id == req.session.user.userId || req.session.user.role.role === 'Finance-Manager' || req.session.user.role.role === 'Admin') {
     const idParam = +req.params.statusId; // convert to number
     reimbursements.getReimbursementsByStatus(idParam).then(function (result) {
       res.status(200).send(pageGenerator(['Reimbursements', reimbursementbody(result, req.session.user.role, false)], req.session.user));
@@ -104,8 +104,8 @@ reimbursementRouter.get('/status/:statusId', [authFinanceMiddleware, (req, res) 
 }]);
 
 // Get specific reimbursement
-reimbursementRouter.get('/r/:id', [authFinanceMiddleware, (req, res) => {
-  if (req.params.id == req.session.user.userId || req.session.user.role.role === 'Finance-Manager') {
+reimbursementRouter.get('/r/:id', [authAdminFinanceMiddleware, (req, res) => {
+  if (req.params.id == req.session.user.userId || req.session.user.role.role === 'Finance-Manager' || req.session.user.role.role === 'Admin') {
     const idParam = +req.params.id; // convert to number
     reimbursements.getReimbursementsById(idParam).then(function (result) {
       res.status(200).send(pageGenerator(['Reimbursements', reimbursementbody(result, req.session.user.role, true)], req.session.user));
@@ -143,7 +143,7 @@ function reimbursementbody(filteredReimbursements, role, form) {
         dateResolved = new Date(ele.dateResolved * 1000).toLocaleDateString('en-US');
       }
       const resolver = ele.resolver.firstName + ' ' + ele.resolver.lastName;
-      if (role.role === 'Finance-Manager') {
+      if (role.role === 'Finance-Manager' || role.role === 'Admin') {
         body += `<td><a href="/reimbursements/r/${ele.reimbursementId}"><input name="reimbursementId" type="hidden" value="${ele.reimbursementId}">${ele.reimbursementId}</input></a></td>`;
       } else {
         body += `<td>${ele.reimbursementId}</td>`;

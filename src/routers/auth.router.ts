@@ -8,10 +8,13 @@ const users = new UserDAO();
 const loginPage = ['Login Page', `<p>Please login</p>
 <div id="login">
 <form method="post" action="/login">
-<p>Username:<br/><input type="text" name="username" id="username" value=""></p>
-<p>Password<br/><input type="password" name="password" id="password" value="">
+<p>Username:</p>
+<input type="text" name="username" id="username" value="" placeholder="username">
+<p>Password: <br/>
+<br/>
+<input type="password" name="password" id="password" value="" placeholder="password">
 <p>&nbsp;</p>
-<p><input type="submit" value="Login"></p>
+<p><input type="submit" value="Login" class="button2"></p>
 </form>
 </div>`];
 const homePage = ['Home', `<p>Welcome</p>`];
@@ -84,7 +87,9 @@ export function pageGenerator(vars, user) {
   }
   let html = `<html>
   <head>
-  <title>Project 0 - ${title}</title>
+  <title>Project 0 App - ${title}</title>\
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
   </head>
   <body>

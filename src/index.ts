@@ -6,8 +6,10 @@ import { userRouter } from './routers/user.router';
 import { reimbursementRouter } from './routers/reimbursement.router';
 import { notFound, internalError } from './middleware/error.middleware';
 
+// 
 const methodOverride = require('method-override');
 
+// 
 const app = express();
 app.use('/', express.static(__dirname + '/views/'));
 
@@ -39,14 +41,22 @@ const sess = {
   saveUninitialized: false
 };
 
-// create session
+// make a new session
 app.use(session(sess));
 
-// routers
+// connecting the routers
 app.use('/', authRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimbursementRouter);
 
+// connecting the error middleware
+app.use(function(req, res) {
+  notFound(req, res);
+});
+app.use(function(error, req, res) {
+ internalError(req, res);
+});
 
+// 
 app.listen(3000);
 console.log(`application started on port: ${3000}`);

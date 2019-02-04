@@ -3,9 +3,9 @@ begin transaction;
 
 drop table "role"
 drop table "user"
-drop table reimbursetment
-drop table reimbursetmentType
-drop table reimbursetmentStatus
+drop table reimbursement
+drop table reimbursementtype
+drop table reimbursementstatus
 
 
 create table "role" (
@@ -57,6 +57,7 @@ insert into "role" ("role") values ('Finance-Manager');
 insert into "role" ("role") values ('Associate'      );
 --users
 insert into "user" (username, "password", firstname, lastname, email, "role") values ('pjacks',  'password', 'Peter', 'Jackson', 'pjacks@projco.com', 1);
+insert into "user" (username, "password", firstname, lastname, email, "role") values ('admin',  'password', 'Adam', 'Admenson', 'admin@projco.com', 1);
 insert into "user" (username, "password", firstname, lastname, email, "role") values ('kholmes', 'password', 'Kyle',  'Holmes',  'kholms@projco.com', 2);
 insert into "user" (username, "password", firstname, lastname, email, "role") values ('momar',  'password', 'Mohamed',  'Omar',   'momar@projco.com',  2);
 insert into "user" (username, "password", firstname, lastname, email, "role") values ('porladna', 'password', 'Peter', 'Orlando', 'porlaando@projco.com',  3);
