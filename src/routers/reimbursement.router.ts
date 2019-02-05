@@ -22,7 +22,7 @@ reimbursementRouter.get('', (req, res) => {
     unauthorizedError(req, res);
   }
   let body = `<p><a href="/reimbursements/submit"><button class="button2">Submit New Reimbursement</button></a><a href="/reimbursements/author/userId/${id}"><button class="button2">Current Reimbursements</button></a></p>`;
-  if ( role === 'Finance-Manager' || 'Admin') {
+  if ( role === 'Finance-Manager' || role === 'Admin') {
     body  += `<p><a href="/reimbursements/author"><button class="login_btn button2">User Reimbursement</button></a><a href="/reimbursements/status"><button class="login_btn button2">Status of Reimbursements</button></a></p>`;
   }
   body += '';

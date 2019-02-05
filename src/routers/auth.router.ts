@@ -21,7 +21,8 @@ const homePage = ['Home Page', `<p>Welcome!</p><p>The Expense Reimbursement Syst
 will manage the process of reimbursing employees for expenses incurred while on company time. 
 All employees in the company can login and submit requests for reimbursement and view their past tickets and pending requests. 
 Finance managers can log in and view all reimbursement requests and past history for all employees in the company. 
-Finance managers are authorized to approve and deny requests for expense reimbursement.</p>`];
+Finance managers are authorized to approve and deny requests for expense reimbursement.</p><br/>
+<p>Basically it's our resposibilty to pay you back for expenses you're not responsible for. But it's YOUR responsibility to let us know</p>`];
 
 // menus -  contains links not unique to user types
 const associateMenu = [
