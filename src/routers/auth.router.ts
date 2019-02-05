@@ -17,7 +17,7 @@ const loginPage = ['Login Page', `<p>Please login</p>
 <p><input type="submit" value="Login" class="button2"></p>
 </form>
 </div>`];
-const homePage = ['Home', `<p>Welcome</p>`];
+const homePage = ['Home', `<p>Welcome</p><p>This web app is created for reimbursements</p>`];
 
 // menus -  contains links not unique to user types
 const associateMenu = [
@@ -122,7 +122,7 @@ export function pageGenerator(vars, user) {
 // create page menu based on user role
 function menuGenerator(items, id) {
   let menu = ``;
-  menu += `<li><a href="/">Home</a></li>`;
+  menu += `<li><a href="/">Home Page</a></li>`;
   items.forEach(element => {
     menu += `<li><a href="${element[1]}">${element[0]}</a></li>`;
   });

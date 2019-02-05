@@ -64,10 +64,10 @@ function userTable(users, user) {
       data += `<tr>
       <td><a href="/users/${element.userId}">${element.userId}</a></td>
       <td>${element.username}</td>
-      <td>********</td>
+      <td>########</td>
       <td>${element.firstName}</td>
       <td>${element.lastName}</td>
-      <td><a href="mailto:${element.email}">${element.email}</a></td>
+      <td>${element.email}</td>
       <td>${element.role.role}</td>
       </tr>`;
     });
@@ -110,7 +110,7 @@ function userTable(users, user) {
       data += `<tr>
       <td>${users.userId}</td>
       <td>${users.username}</td>
-      <td>********</td>
+      <td>########</td>
       <td>${users.firstName}</td>
       <td>${users.lastName}</td>
       <td>${users.email}</td>
@@ -119,13 +119,13 @@ function userTable(users, user) {
       data += `<tr>
       <td>${users.userId}</td>
       <td>${users.username}</td>
-      <td>********</td>
+      <td>########</td>
       <td>${users.firstName}</td>
       <td>${users.lastName}</td>
       <td>${users.email}</td>
       <td>${users.role.role}</td>`;
     } else {
-      data += `<td colspan="7">401:Unauthorized</td>`;
+      data += `<td colspan="7">Unauthorized</td>`;
     }
   }
   data += '</table>';

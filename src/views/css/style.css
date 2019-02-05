@@ -74,6 +74,8 @@ margin-right: 5px;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     cursor: pointer;
+    height: 50px;
+    width: 300px;
   }
   
   .button2:hover {

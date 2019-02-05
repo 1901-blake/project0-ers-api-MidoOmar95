@@ -6,27 +6,24 @@ import { ReimbursementStatusDAO } from '../dao/reimbursementstatusDAO';
 import { ReimbursementDAO } from '../dao/reimbursementDAO';
 import { UserDAO } from '../dao/userDAO';
 
-// DB
+// Database
 const users = new UserDAO();
 const statuses = new ReimbursementStatusDAO();
 const reimbursements = new ReimbursementDAO();
 
 // we will assume all routes defined with this router
-// start with '/users'
 export const reimbursementRouter = express.Router();
 
-// generate root reimbursements page with links based on if Finance-Manager or not.
+// generate root reimbursements page with links based on if Admin/Finance-Manager or not.
 reimbursementRouter.get('', (req, res) => {
   const role = req.session.user.role.role;
   const id = req.session.user.userId;
   if (role === undefined) {
     unauthorizedError(req, res);
   }
-  let body = `<p><a href="/reimbursements/submit"><button class="button2">Submit Reimbursements</button></a></p>`;
-  body    += `<p><a href="/reimbursements/author/userId/${id}"><button class="button2">My Reimbursements</button></a></p>`;
+  let body = `<p><a href="/reimbursements/submit"><button class="button2">Submit New Reimbursement</button></a><a href="/reimbursements/author/userId/${id}"><button class="button2">Current Reimbursements</button></a></p>`;
   if ( role === 'Finance-Manager' || 'Admin') {
-    body  += `<p><a href="/reimbursements/author"><button class="login_btn button2">Reimbursements by User</button></a></p>`;
-    body  += `<p><a href="/reimbursements/status"><button class="login_btn button2">Reimbursements by Status</button></a></p>`;
+    body  += `<p><a href="/reimbursements/author"><button class="login_btn button2">User Reimbursement</button></a><a href="/reimbursements/status"><button class="login_btn button2">Status of Reimbursements</button></a></p>`;
   }
   body += '';
   res.status(200).send(pageGenerator(['Reimbursements', body], req.session.user));
@@ -49,7 +46,7 @@ reimbursementRouter.get('/submit', (req, res) => {
   <option name="Food" value="3">Food</option>
   <option name="Other" value="4">Other</option>
   </select></td></tr>
-  <tr><td colspan="2"><input type="submit" value="Submit"></input></td></tr>
+  <tr><td colspan="2"><button class="button2"><input type="submit" value="Submit"></button></input></td></tr>
   <table></form>`;
   res.status(200).send(pageGenerator(['Reimbursements', body], req.session.user));
 });
@@ -82,7 +79,7 @@ reimbursementRouter.get('/author/userId/:id', (req, res) => {
   if (req.session === undefined || req.session.user === undefined || req.session.user.role.role === undefined) {
     unauthorizedError(req, res);
   } else if (req.params.id == req.session.user.userId || req.session.user.role.role === 'Finance-Manager' || req.session.user.role.role === 'Admin') {
-    const idParam = +req.params.id; // convert to number
+    const idParam = +req.params.id; 
     reimbursements.getReimbursementsByUserId(idParam).then(function (result) {
       res.status(200).send(pageGenerator(['Reimbursements', reimbursementbody(result, req.session.user.role, false)], req.session.user));
     });
@@ -94,7 +91,7 @@ reimbursementRouter.get('/author/userId/:id', (req, res) => {
 // Get reimbursements by status
 reimbursementRouter.get('/status/:statusId', [authAdminFinanceMiddleware, (req, res) => {
   if (req.params.id == req.session.user.userId || req.session.user.role.role === 'Finance-Manager' || req.session.user.role.role === 'Admin') {
-    const idParam = +req.params.statusId; // convert to number
+    const idParam = +req.params.statusId; 
     reimbursements.getReimbursementsByStatus(idParam).then(function (result) {
       res.status(200).send(pageGenerator(['Reimbursements', reimbursementbody(result, req.session.user.role, false)], req.session.user));
     });
@@ -115,13 +112,12 @@ reimbursementRouter.get('/r/:id', [authAdminFinanceMiddleware, (req, res) => {
   }
 }]);
 
-// Turn reimbursements array into a table
 function reimbursementbody(filteredReimbursements, role, form) {
   let body = `<form action="/reimbursements/" method="post">
   <input type="hidden" name="_method" value="patch">
   <table><tr>
   <td>ID</td>
-  <td>Author</td>
+  <td>User</td>
   <td>Amount</td>
   <td>Submitted</td>
   <td>Resolved</td>
@@ -162,7 +158,7 @@ function reimbursementbody(filteredReimbursements, role, form) {
         <option value="3">Denied</option>
         </select></td>
         <td>${ele.type.type}</td></tr>
-        <td colspan = "9"><input type="submit" value="Update"></input></td>`;
+        <td colspan = "9"><button class="button2"><input type="submit" value="Update" class="button2"></button></input></td>`;
       } else {
         body += `<td>${ele.status.status}</td>
         <td>${ele.type.type}</td></tr>`;
