@@ -41,12 +41,12 @@ reimbursementRouter.get('/submit', (req, res) => {
   <tr><td>Description</td><td><input name="description" id="description"></input></td></tr>
   <tr><td>Amount</td><td>$<input name="amount" id="amount" type="number" step=".01" min=".01"></input></td></tr>
   <tr>Type<td>Type</td><td><select name="type">
-  <option name="Lodging" selected="true" value="1">Lodging</option>
-  <option name="Travel" value="2">Travel</option>
-  <option name="Food" value="3">Food</option>
+  <option name="Food" selected="true" value="1">Food</option>
+  <option name="Lodging" value="2">Lodging</option>
+  <option name="Travel" value="3">Travel</option>
   <option name="Other" value="4">Other</option>
   </select></td></tr>
-  <tr><td colspan="2"><button class="button2"><input type="submit" value="Submit"></button></input></td></tr>
+  <tr><td colspan="2"><input type="submit" value="Submit" input="button2"></input></td></tr>
   <table></form>`;
   res.status(200).send(pageGenerator(['Reimbursements', body], req.session.user));
 });
@@ -114,7 +114,7 @@ reimbursementRouter.get('/r/:id', [authAdminFinanceMiddleware, (req, res) => {
 
 function reimbursementbody(filteredReimbursements, role, form) {
   let body = `<form action="/reimbursements/" method="post">
-  <input type="hidden" name="_method" value="patch">
+  <input type="hidden" name="_method" value="patch" class="button2">
   <table><tr>
   <td>ID</td>
   <td>User</td>
@@ -140,7 +140,7 @@ function reimbursementbody(filteredReimbursements, role, form) {
       }
       const resolver = ele.resolver.firstName + ' ' + ele.resolver.lastName;
       if (role.role === 'Finance-Manager' || role.role === 'Admin') {
-        body += `<td><a href="/reimbursements/r/${ele.reimbursementId}"><input name="reimbursementId" type="hidden" value="${ele.reimbursementId}">${ele.reimbursementId}</input></a></td>`;
+        body += `<td><a href="/reimbursements/r/${ele.reimbursementId}"><input class="button2" name="reimbursementId" type="hidden" value="${ele.reimbursementId}">${ele.reimbursementId}</input></a></td>`;
       } else {
         body += `<td>${ele.reimbursementId}</td>`;
       }
@@ -158,7 +158,7 @@ function reimbursementbody(filteredReimbursements, role, form) {
         <option value="3">Denied</option>
         </select></td>
         <td>${ele.type.type}</td></tr>
-        <td colspan = "9"><button class="button2"><input type="submit" value="Update" class="button2"></button></input></td>`;
+        <td colspan = "9"><input type="submit" value="Update" class="button2"></input></td>`;
       } else {
         body += `<td>${ele.status.status}</td>
         <td>${ele.type.type}</td></tr>`;
@@ -169,7 +169,6 @@ function reimbursementbody(filteredReimbursements, role, form) {
   return body;
 }
 
-// Show all users
 function userbody(u) {
   let body = `<table><tr>
   <td>ID</td>

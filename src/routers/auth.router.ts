@@ -17,7 +17,11 @@ const loginPage = ['Login Page', `<p>Please login</p>
 <p><input type="submit" value="Login" class="button2"></p>
 </form>
 </div>`];
-const homePage = ['Home', `<p>Welcome</p><p>This web app is created for reimbursements</p>`];
+const homePage = ['Home Page', `<p>Welcome!</p><p>The Expense Reimbursement System (ERS) 
+will manage the process of reimbursing employees for expenses incurred while on company time. 
+All employees in the company can login and submit requests for reimbursement and view their past tickets and pending requests. 
+Finance managers can log in and view all reimbursement requests and past history for all employees in the company. 
+Finance managers are authorized to approve and deny requests for expense reimbursement.</p>`];
 
 // menus -  contains links not unique to user types
 const associateMenu = [
@@ -40,7 +44,7 @@ authRouter.post('/login', (req, res) => {
   users.getAllUsers().then(function (result) {
     result.forEach(element => {
       if (req.body.username === element.username && req.body.password === element.password) {
-        element.password = '******';
+        element.password = '########';
         req.session.user = element;
         passed = true;
       }
@@ -54,7 +58,6 @@ authRouter.post('/login', (req, res) => {
   });
 });
 
-// present login if not logged in
 authRouter.get('/', (req, res) => {
   if (req.session.user === undefined) {
     res.status(200).send(pageGenerator(loginPage, ''));
@@ -63,19 +66,16 @@ authRouter.get('/', (req, res) => {
   }
 });
 
-// redirect to home
 authRouter.get('/login', (req, res) => {
   res.redirect('/');
 });
 
 authRouter.get('/logout', (req, res) => {
   req.session.destroy(function(err) {
-    // cannot access session here
   });
   res.redirect('/');
 });
 
-// create page body using template
 export function pageGenerator(vars, user) {
   const title = vars[0];
   const body = vars[1];
@@ -87,7 +87,7 @@ export function pageGenerator(vars, user) {
   }
   let html = `<html>
   <head>
-  <title>Project 0 App - ${title}</title>\
+  <title>Project 0 App- ${title}</title>\
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -119,7 +119,6 @@ export function pageGenerator(vars, user) {
   return html;
 }
 
-// create page menu based on user role
 function menuGenerator(items, id) {
   let menu = ``;
   menu += `<li><a href="/">Home Page</a></li>`;
@@ -127,7 +126,7 @@ function menuGenerator(items, id) {
     menu += `<li><a href="${element[1]}">${element[0]}</a></li>`;
   });
   if (id !== '') {
-    menu += `<li><a href="/users/${id}">Profile</a></li>`;
+    menu += `<li><a href="/users/${id}">Your Profile</a></li>`;
     menu += `<li><a href="/logout">Logout</a></li>`;
   }
   return menu;

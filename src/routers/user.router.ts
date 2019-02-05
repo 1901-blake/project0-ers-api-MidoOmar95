@@ -8,7 +8,6 @@ export const userRouter = express.Router();
 
 const users = new UserDAO();
 
-// change ?id=# to /#
 userRouter.get('', (req, res, next) => {
   if (req.query.id === undefined) {
     next();
@@ -17,16 +16,14 @@ userRouter.get('', (req, res, next) => {
   }
 });
 
-// show all users
 userRouter.get('/', [authAdminFinanceMiddleware, (req, res) => {
   users.getAllUsers().then(function (result) {
     res.status(200).send(pageGenerator(['Users', userTable(result, req.session.user)], req.session.user));
   });
 }]);
 
-// show one user based on ID
 userRouter.get('/:id', (req, res) => {
-  const idParam = +req.params.id; // convert to number
+  const idParam = +req.params.id; 
   users.getAllUsers().then(function (result) {
     try {
       const user = result.find(ele => ele.userId === idParam);
@@ -37,19 +34,17 @@ userRouter.get('/:id', (req, res) => {
   });
 });
 
-// patch user(makes changes)
 userRouter.patch('*', [authAdminMiddleware, (req, res) => {
   UserDAO.updateUser(req.body);
   res.redirect('/users');
 }]);
 
-// create content  for users and users/#
 function userTable(users, user) {
   const id = user.userId;
   const role = user.role.role;
   let data = '';
   if (users.constructor == Array) {
-    data += `<form action="users" method="patch">Select user by ID: <input type="number" name="id" min="1" max="${users.length}" value="1"><input type="submit"></form>`;
+    data += `<form action="users" method="patch">Select user by ID: <input type="number" name="id" min="1" max="${users.length}" value="1"><input class="button2" type="submit"></form>`;
   }
   data += `<Table><tr>
   <td>ID</td>
@@ -103,7 +98,7 @@ function userTable(users, user) {
       data += `</select></td>
       </tr>
       <tr>
-      <td colspan = "7"><input type="submit" value="Update"></input></td>
+      <td colspan = "7"><input type="submit" value="Update" class="button2"></input></td>
       </tr>
       </form>`;
     } else if (role === 'Finance-Manager') {
@@ -125,7 +120,7 @@ function userTable(users, user) {
       <td>${users.email}</td>
       <td>${users.role.role}</td>`;
     } else {
-      data += `<td colspan="7">Unauthorized</td>`;
+      data += `<td colspan="7">Unauthorized Access: Go get some real credentials fam.</td>`;
     }
   }
   data += '</table>';
